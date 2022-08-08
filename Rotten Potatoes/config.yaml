@@ -9,6 +9,5 @@ arch:
   - armhf
   - armv7
   - i386
-startup: before
 ports:
   6666/tcp: 6666
