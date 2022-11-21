@@ -28,8 +28,8 @@ RUN \
     # Create working directory
  && mkdir /openalpr
 
-COPY entry.sh /opt/entry.sh
+COPY run.sh /opt/run.sh
 
 WORKDIR /openalpr
 
-CMD ["/opt/entry.sh"]
+CMD ["/opt/run.sh"]
