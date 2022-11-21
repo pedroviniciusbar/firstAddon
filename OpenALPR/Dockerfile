@@ -1,4 +1,6 @@
-FROM alpine:latest
+ARG BUILD_FROM
+FROM $BUILD_FROM
+
 MAINTAINER Matt Hill <matthill@openalpr.com>
 
 
