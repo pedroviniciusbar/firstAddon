@@ -1,7 +1,7 @@
-name: "OpenALPR"
+name: "OpenALPR1"
 description: "My first real add-on!"
 version: "1.0.0"
-slug: "OpenALPR"
+slug: "OpenALPR1"
 init: false
 arch:
   - aarch64
