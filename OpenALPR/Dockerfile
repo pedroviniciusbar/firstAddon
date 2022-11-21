@@ -9,8 +9,8 @@ RUN \
     libexecinfo libcurl leptonica log4cplus opencv tesseract-ocr \
     libcanberra-gtk3 ttf-freefont \
     # Install build dependencies
- &&  apt-get update && apt-get -y install software-properties-common
- && add-apt-repository -y ppa:alex-p/tesseract-ocr-devel   
+ &&  apt-get update && apt-get -y install software-properties-common \
+ && add-apt-repository -y ppa:alex-p/tesseract-ocr-devel \
  && apk --no-cache add --virtual .build-deps \
     ca-certificates wget \
     git gcc g++ cmake make curl-dev leptonica-dev log4cplus-dev opencv-dev libexecinfo-dev liblog4cplus-dev tesseract-ocr-devel
