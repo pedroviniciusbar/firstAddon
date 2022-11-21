@@ -1,0 +1,11 @@
+name: "OpenALPR"
+description: "My first real add-on!"
+version: "1.0.0"
+slug: "OpenALPR"
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
