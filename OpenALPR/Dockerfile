@@ -11,8 +11,10 @@ RUN \
     # Install build dependencies
  && apk --no-cache add --virtual .build-deps \
     ca-certificates wget \
-    git gcc g++ cmake make curl-dev leptonica-dev log4cplus-dev opencv-dev tesseract-ocr-dev libexecinfo-dev \
+    git gcc g++ cmake make curl-dev leptonica-dev log4cplus-dev opencv-dev tesseract-ocr-dev libexecinfo-dev liblog4cplus-dev libtesseract-dev
+ \
     # Prepare build directories
+ && find / -name "tessdata"
  && cd /srv \
  && git clone https://github.com/openalpr/openalpr.git \
  && cd openalpr/src && mkdir build && cd build \
