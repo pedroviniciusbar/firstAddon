@@ -1,3 +1,3 @@
 
-FROM python:3.8-slim-buster
-CMD [ "/run.sh" ]
+FROM alpine
+CMD [ "ls" ]
