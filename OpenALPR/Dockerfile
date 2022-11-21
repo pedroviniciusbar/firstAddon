@@ -1,4 +1,5 @@
-FROM alpine:edge
+ARG BUILD_FROM
+FROM $BUILD_FROM
 
 RUN \
     # Enable testing repo
