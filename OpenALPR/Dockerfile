@@ -1,20 +1,45 @@
-# This Dockerfile allows you to set up OpenALPR on an Ubuntu Docker image
-# The OS & Packages installed were from the following wiki: 
-# https://github.com/openalpr/openalpr/wiki/Compilation-instructions-(Ubuntu-Linux)
-FROM ubuntu:16.04
+FROM ubuntu:18.04
+MAINTAINER Matt Hill <matthill@openalpr.com>
 
-# Contact info
-LABEL maintainerName="Pedro Vinicius"
-LABEL maintainer="pedrovinicius36@gmail.com"
 
-# Installing wget to run examples
-# Installing base packages specified by 
-RUN apt-get update -qq && apt-get install -y \
-    wget \
-    openalpr \
-    openalpr-daemon \
-    openalpr-utils \
-    libopenalpr-dev
+# Setup gpg key and deb repo
+RUN apt-get update && apt-get install -y curl gnupg && \
+    curl -sSL http://deb.openalpr.com/openalpr.gpg.key | apt-key add - && \
+    echo "deb http://deb.openalpr.com/bionic/ bionic main" > /etc/apt/sources.list.d/openalpr.list && \
+	apt-get update && apt-get install -y \
+      libalprstream-dev \
+      openalpr \
+      openalpr-daemon \
+      openalpr-link \
+      python-alprstream \
+      python-openalpr \
+      supervisor && \
+      touch /usr/share/openalpr/is_docker && \
+      rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /app
-WORKDIR /app
+
+# Adjust beanstalkd to also allow remote connections
+RUN sed -i 's/BEANSTALKD_LISTEN_ADDR\s*=\s*127.0.0.1/BEANSTALKD_LISTEN_ADDR=0.0.0.0/' /etc/default/beanstalkd
+
+# Expose the beanstalkd port and the web service
+EXPOSE 11300 8355
+
+# Allow the plate images to be persisted on the host
+VOLUME /var/lib/openalpr/
+VOLUME /etc/openalpr/
+
+WORKDIR ~/
+
+# Override script for "service" to allow alprlink to restart service
+COPY service-override /bin/systemctl
+
+# Startup script for OpenALPR services
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# send over the license key and the alprd configuration
+#COPY license.conf /etc/openalpr/license.conf
+COPY alprd.conf /etc/openalpr/alprd.conf
+
+CMD ["/usr/bin/supervisord"]
+
+
