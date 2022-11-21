@@ -1,5 +1,5 @@
 ARG BUILD_FROM
-FROM $BUILD_FROM
+FROM alpine:latest
 
 # Copy data for add-on
 COPY run.sh /
