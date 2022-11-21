@@ -6,4 +6,4 @@ init: false
 arch:
   - aarch64
   - amd64
-image: ubuntu:18.04
+image: python:3.8-slim-buster
