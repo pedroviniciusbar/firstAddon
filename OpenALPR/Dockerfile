@@ -32,4 +32,4 @@ COPY entry.sh /opt/entry.sh
 
 WORKDIR /openalpr
 
-ENTRYPOINT ["/opt/entry.sh"]
+CMD ["/opt/entry.sh"]
