@@ -13,7 +13,7 @@ RUN \
  && add-apt-repository -y ppa:alex-p/tesseract-ocr-devel   
  && apk --no-cache add --virtual .build-deps \
     ca-certificates wget \
-    git gcc g++ cmake make curl-dev leptonica-dev log4cplus-dev opencv-dev libexecinfo-dev liblog4cplus-dev 
+    git gcc g++ cmake make curl-dev leptonica-dev log4cplus-dev opencv-dev libexecinfo-dev liblog4cplus-dev tesseract-ocr-devel
     #libtesseract-dev tesseract-ocr-dev
  \
     # Prepare build directories
