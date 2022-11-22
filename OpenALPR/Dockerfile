@@ -11,11 +11,13 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     liblog4cplus-dev \
     libopencv-dev \
     libtesseract-dev \
-    wget
+    wget \
+    openjdk-8-jdk \
+    default-jdk
 
 # Copy all data
 COPY . /srv/openalpr
-
+RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 # Setup the build directory
 RUN mkdir /srv/openalpr/src/build
 WORKDIR /srv/openalpr/src/build
