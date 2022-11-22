@@ -1,38 +1,39 @@
-ARG BUILD_FROM
-FROM $BUILD_FROM
+FROM ubuntu:18.04
 
-RUN \
-    # Enable testing repo
-    echo "http://nl.alpinelinux.org/alpine/edge/testing" >>/etc/apk/repositories \
-    # Install needed libs
- && apk --no-cache add \
-    libexecinfo libcurl leptonica log4cplus opencv tesseract-ocr \
-    libcanberra-gtk3 ttf-freefont \
-    # Install build dependencies
+# Install prerequisites
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    build-essential \
+    cmake \
+    curl \
+    git \
+    libcurl3-dev \
+    libleptonica-dev \
+    liblog4cplus-dev \
+    libopencv-dev \
+    libtesseract-dev \
+    wget
+
+# Copy all data
+COPY . /srv/openalpr
+
+# Setup the build directory
+RUN mkdir /srv/openalpr/src/build
+WORKDIR /srv/openalpr/src/build
+
+# Setup the compile environment
+RUN cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_INSTALL_SYSCONFDIR:PATH=/etc .. && \
+    make -j2 && \
+    make install
     
- && apk --no-cache add --virtual .build-deps \
-    ca-certificates wget \
-    git gcc g++ cmake make curl-dev leptonica-dev log4cplus-dev opencv-dev tesseract-ocr-dev libexecinfo-dev liblog4cplus-dev tesseract-ocr-devel
- \
-    # Prepare build directories
- && find / -name "tessdata"
- && cd /srv \
- && git clone https://github.com/openalpr/openalpr.git \
- && cd openalpr/src && mkdir build && cd build \
-    # Patch to be able to compile with Musl glibc
- && sed -i.bak 's/backtrace/0;\/\//' ../daemon.cpp \
-    # Build
- && cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_INSTALL_SYSCONFDIR:PATH=/etc .. && \
-    make -j8 && \
-    make install \
-    # Clean not needed build directory and dependencies
- && rm -rf /srv/openalpr \
- && apk del .build-deps \
-    # Create working directory
- && mkdir /openalpr
+COPY run.sh /data/
+COPY sample.png /data/
 
-COPY run.sh /opt/run.sh
+RUN chmod +x /data/run.sh
 
-WORKDIR /openalpr
+WORKDIR /data
 
-CMD ["/opt/run.sh"]
+#CMD ["/bin/sh", "-c", "run.sh"]
+#CMD ["alpr","sample.png","run.sh"]
+#RUN chmod a+x ./run.sh
+#ENTRYPOINT ["/bin/sh", "-c", "run.sh" ]
+ENTRYPOINT ["alpr"]
